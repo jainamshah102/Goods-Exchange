@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const UserRouter = require("./routes/user.route");
+const NotFoundError = require("./errors/notFoundError");
 
 mongoose
     .connect(process.env.MONGO_URL, {})
@@ -18,5 +18,21 @@ app.use(
 app.use(express.json());
 
 app.use("/user", UserRouter);
+
+app.all("*", (req, res, next) => {
+    return next(new NotFoundError("Api does not exist."));
+});
+
+app.use((err, req, res, next) => {
+    if (process.env.mode == "development") console.log(err);
+
+    err.statusCode = err.status || 500;
+    err.message = err.message || "Failed.";
+
+    res.status(err.statusCode).json({
+        success: false,
+        message: err.message,
+    });
+});
 
 module.exports = app;

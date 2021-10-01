@@ -1,10 +1,9 @@
 module.exports = class DatabaseError extends Error {
-    PrintError;
-    StatusCode = 503;
-    name = "DatabaseError";
+    statusCode = 503;
+    name = "Database Error";
 
-    constructor(message, PrintError) {
+    constructor(message, statusCode) {
         super(message);
-        this.PrintError = PrintError;
+        this.statusCode = statusCode;
     }
 };

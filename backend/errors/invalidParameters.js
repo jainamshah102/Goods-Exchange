@@ -1,15 +1,9 @@
 module.exports = class InvalidParameters extends Error {
-    PrintError;
-    StatusCode = 400;
-    name = "InvalidParameters";
+    statusCode = 400;
+    name = "Invalid Parameters";
 
-    constructor(message, PrintError) {
+    constructor(message, statusCode) {
         super(message);
-        if (!message) {
-            this.message = "Invalid Parameters";
-        } else {
-            this.message = message;
-        }
-        this.PrintError = PrintError;
+        this.statusCode = statusCode;
     }
 };
