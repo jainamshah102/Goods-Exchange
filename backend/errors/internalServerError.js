@@ -1,11 +1,9 @@
 export default class InternalServerError extends Error {
-    PrintError;
-    StatusCode;
+    statusCode = 500;
 
-    constructor(message, PrintError) {
+    constructor(message, statusCode) {
         super(message);
         this.name = "InternalServerError";
-        this.PrintError = PrintError;
-        this.StatusCode = 500;
+        this.statusCode = statusCode;
     }
 }

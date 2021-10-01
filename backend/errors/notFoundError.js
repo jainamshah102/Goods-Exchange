@@ -1,10 +1,9 @@
 module.exports = class NotFound extends Error {
-    PrintError;
-    StatusCode = 404;
+    statusCode = 404;
     name = "NotFound";
 
-    constructor(message, PrintError) {
+    constructor(message, statusCode) {
         super(message);
-        this.PrintError = PrintError;
+        this.statusCode = statusCode;
     }
 };

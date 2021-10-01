@@ -1,10 +1,9 @@
 module.exports = class AuthenticationError extends Error {
-    PrintError;
-    StatusCode = 401;
-    name = "AuthenticationError";
+    statusCode = 401;
+    name = "Authentication Error";
 
-    constructor(message, PrintError) {
+    constructor(message, statusCode) {
         super(message);
-        this.PrintError = PrintError;
+        this.statusCode = statusCode;
     }
 };
