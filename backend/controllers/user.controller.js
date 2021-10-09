@@ -1,12 +1,13 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const InvalidParameters = require("../errors/invalidParameters");
+const AuthenticationError = require("../errors/authenticationError");
 const User = require("../models/user.model");
-const UserRegisterJoi = require("../joiValidation/user.joi");
+const UserJoi = require("../joiValidation/user.joi");
 
 module.exports.userRegister = async (req, res, next) => {
     try {
-        const newUser = await UserRegisterJoi(req.body);
+        const newUser = await UserJoi.userRegisterJoi(req.body);
         const checkUser = await Promise.all([
             User.findOne({ email: newUser.email }).exec(),
             User.findOne({ contactNumber: newUser.contactNumber }).exec(),
@@ -14,7 +15,7 @@ module.exports.userRegister = async (req, res, next) => {
         ]);
 
         if (checkUser[0] || checkUser[1] || checkUser[2])
-            return next(new InvalidParameters("User already exists.", 400));
+            return next(new InvalidParameters("User already exists."));
 
         const encryptedPassword = await bcrypt.hash(newUser.password, 12);
         newUser.password = encryptedPassword;
@@ -32,38 +33,30 @@ module.exports.userRegister = async (req, res, next) => {
         res.status(201).json({ user, token });
     } catch (err) {
         console.log(err);
-        next(new InvalidParameters("Invalid Parameters", 400));
+        next(new InvalidParameters("Invalid Parameters"));
     }
 };
 
+module.exports.userLogin = async (req, res, next) => {
+    try {
+        const { username, password } = await UserJoi.userLoginJoi(req.body);
 
-module.exports.userLogin = async (req,res,next) =>{
-    try{
-        const { useranme, password } =await UserRegisterJoi(req.body);
-        if (!(useranme && password)) {
-            res.status(400).send("All fields are required");
-        }
-
-        const user = await User.findOne({ useranme });
+        const user = await User.findOne({ username });
 
         if (user && (await bcrypt.compare(password, user.password))) {
-            // Create token
             const token = jwt.sign(
-              { user_id: user._id, email },
-              process.env.TOKEN_KEY,
-              {
-                expiresIn: "2h",
-              }
+                {
+                    user_id: user._id,
+                    email: user.email,
+                },
+                process.env.SERVER_SECRET_KEY
             );
-      
-            // save user token
-            user.token = token;
-      
-            // user
-            res.status(200).json(user);
+
+            return res.status(200).json({ user, token });
         }
-        res.status(400).send("Invalid Credentials");
-    } catch(err){
-        next(err);
+
+        return next(new AuthenticationError("Invalid Username/Password"));
+    } catch (err) {
+        next(new InvalidParameters("Invalid Parameters"));
     }
 };

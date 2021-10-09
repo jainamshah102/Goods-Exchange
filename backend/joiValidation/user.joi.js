@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const InvalidParameters = require("../errors/invalidParameters");
 
-const userRegister = async (body) => {
+module.exports.userRegisterJoi = async (body) => {
     const schema = Joi.object({
         username: Joi.string().required().max(20).min(3),
 
@@ -32,4 +32,14 @@ const userRegister = async (body) => {
     return resp;
 };
 
-module.exports = userRegister;
+module.exports.userLoginJoi = async (body) => {
+    const schema = Joi.object({
+        username: Joi.string().required().max(20).min(3),
+
+        password: Joi.string().required(),
+    });
+
+    const resp = await schema.validateAsync(body);
+
+    return resp;
+};
