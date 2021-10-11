@@ -4,17 +4,16 @@ const InvalidParameters = require("../errors/invalidParameters");
 const AuthenticationError = require("../errors/authenticationError");
 const User = require("../models/user.model");
 const UserJoi = require("../joiValidation/user.joi");
-let success=false;
+
 module.exports.userRegister = async (req, res, next) => {
     try {
         const newUser = await UserJoi.userRegisterJoi(req.body);
         const checkUser = await Promise.all([
             User.findOne({ email: newUser.email }).exec(),
             User.findOne({ contactNumber: newUser.contactNumber }).exec(),
-            User.findOne({ username: newUser.username }).exec(),
         ]);
 
-        if (checkUser[0] || checkUser[1] || checkUser[2])
+        if (checkUser[1] || checkUser[2])
             return next(new InvalidParameters("User already exists."));
 
         const encryptedPassword = await bcrypt.hash(newUser.password, 12);
@@ -30,18 +29,20 @@ module.exports.userRegister = async (req, res, next) => {
             process.env.SERVER_SECRET_KEY
         );
 
-        res.status(201).json({ user, token });
+        res.status(201).json({ user, token, success: true });
     } catch (err) {
-        console.log(err);
+        if (process.env.MODE == "development") console.log(err);
         next(new InvalidParameters("Invalid Parameters"));
     }
 };
 
 module.exports.userLogin = async (req, res, next) => {
     try {
-        const { username, password } = await UserJoi.userLoginJoi(req.body);
+        const { contactNumber, password } = await UserJoi.userLoginJoi(
+            req.body
+        );
 
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ contactNumber });
 
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = jwt.sign(
@@ -51,12 +52,15 @@ module.exports.userLogin = async (req, res, next) => {
                 },
                 process.env.SERVER_SECRET_KEY
             );
-            success=true;
-            return res.status(200).json({ success,user, token });
+
+            return res
+                .status(200)
+                .json({ success, user, token, success: true });
         }
 
         return next(new AuthenticationError("Invalid Username/Password"));
     } catch (err) {
+        if (process.env.MODE == "development") console.log(err);
         next(new InvalidParameters("Invalid Parameters"));
     }
 };

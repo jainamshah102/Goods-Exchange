@@ -1,15 +1,14 @@
 const Joi = require("joi");
-const InvalidParameters = require("../errors/invalidParameters");
 
 module.exports.userRegisterJoi = async (body) => {
     const schema = Joi.object({
-        username: Joi.string().required().max(20).min(3),
-
         firstName: Joi.string().required(),
 
         lastName: Joi.string().required(),
 
-        email: Joi.string().email({ tlds: { allow: ["com", "net"] } }),
+        email: Joi.string()
+            .email({ tlds: { allow: ["com", "net"] } })
+            .default(""),
 
         password: Joi.string().required(),
 
@@ -34,7 +33,7 @@ module.exports.userRegisterJoi = async (body) => {
 
 module.exports.userLoginJoi = async (body) => {
     const schema = Joi.object({
-        username: Joi.string().required().max(20).min(3),
+        contactNumber: Joi.number().min(6000000000).max(9999999999).required(),
 
         password: Joi.string().required(),
     });
