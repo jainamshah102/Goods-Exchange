@@ -4,7 +4,7 @@ const InvalidParameters = require("../errors/invalidParameters");
 const AuthenticationError = require("../errors/authenticationError");
 const User = require("../models/user.model");
 const UserJoi = require("../joiValidation/user.joi");
-
+let success=false;
 module.exports.userRegister = async (req, res, next) => {
     try {
         const newUser = await UserJoi.userRegisterJoi(req.body);
@@ -51,8 +51,8 @@ module.exports.userLogin = async (req, res, next) => {
                 },
                 process.env.SERVER_SECRET_KEY
             );
-
-            return res.status(200).json({ user, token });
+            success=true;
+            return res.status(200).json({ success,user, token });
         }
 
         return next(new AuthenticationError("Invalid Username/Password"));
