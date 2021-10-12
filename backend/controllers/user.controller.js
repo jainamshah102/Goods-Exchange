@@ -31,6 +31,7 @@ module.exports.userRegister = async (req, res, next) => {
 
         res.status(201).json({ user, token, success: true });
     } catch (err) {
+        console.log(err);
         if (process.env.MODE == "development") console.log(err);
         next(new InvalidParameters("Invalid Parameters"));
     }
