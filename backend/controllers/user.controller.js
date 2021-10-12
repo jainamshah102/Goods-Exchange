@@ -24,7 +24,7 @@ module.exports.userRegister = async (req, res, next) => {
         const token = jwt.sign(
             {
                 user_id: user._id,
-                email: user.email,
+                contactNumber: user.contactNumber,
             },
             process.env.SERVER_SECRET_KEY
         );
@@ -48,7 +48,7 @@ module.exports.userLogin = async (req, res, next) => {
             const token = jwt.sign(
                 {
                     user_id: user._id,
-                    email: user.email,
+                    contactNumber: user.contactNumber,
                 },
                 process.env.SERVER_SECRET_KEY
             );

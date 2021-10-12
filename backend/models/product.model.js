@@ -25,10 +25,9 @@ PRODUCT_CONDITION = [
 ];
 
 const ProductSchema = new mongoose.Schema({
-    username: {
-        type: String,
+    contactNumber: {
+        type: Number,
         required: true,
-        unique: true,
     },
     title: {
         type: String,
