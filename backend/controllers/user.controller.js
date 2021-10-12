@@ -56,11 +56,12 @@ module.exports.userLogin = async (req, res, next) => {
 
             return res
                 .status(200)
-                .json({ success, user, token, success: true });
+                .json({ user, token, success: true });
         }
 
         return next(new AuthenticationError("Invalid Username/Password"));
     } catch (err) {
+        console.log(err);
         if (process.env.MODE == "development") console.log(err);
         next(new InvalidParameters("Invalid Parameters"));
     }
