@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 
 
 const Login = (props) => {
-    const [credentials, setCredentials] = useState({username: "", password: ""}) 
+    const [credentials, setCredentials] = useState({contactNumber: "", password: ""}) 
     let history = useHistory();
 
     const handleSubmit = async (e) => {
@@ -13,7 +13,7 @@ const Login = (props) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({username: credentials.username, password: credentials.password})
+            body: JSON.stringify({contactNumber: credentials.contactNumber, password: credentials.password})
         });
         const json = await response.json()
         console.log(json);
@@ -36,9 +36,9 @@ const Login = (props) => {
         <div>
             <form  onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Username</label>
-                    <input type="text" className="form-control" value={credentials.username} onChange={onChange} id="username" name="username" aria-describedby="emailHelp" />
-                    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                    <label htmlFor="contactNumber" className="form-label">Contact Number</label>
+                    <input type="text" className="form-control" value={credentials.contactNumber} onChange={onChange} id="contactNumber" name="contactNumber" aria-describedby="emailHelp" />
+                    {/* <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div> */}
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
