@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 
 const MessageSchema = new mongoose.Schema({
     conversation: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "conversations",
     },
 
     to: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users",
     },
 
     from: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users",
     },
 
