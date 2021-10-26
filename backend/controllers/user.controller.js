@@ -54,9 +54,7 @@ module.exports.userLogin = async (req, res, next) => {
                 process.env.SERVER_SECRET_KEY
             );
 
-            return res
-                .status(200)
-                .json({ user, token, success: true });
+            return res.status(200).json({ user, token, success: true });
         }
 
         return next(new AuthenticationError("Invalid Username/Password"));
@@ -66,3 +64,7 @@ module.exports.userLogin = async (req, res, next) => {
         next(new InvalidParameters("Invalid Parameters"));
     }
 };
+
+module.exports.userUpdate = async (req, res, next) => {};
+
+module.exports.userDelete = async (req, res, next) => {};

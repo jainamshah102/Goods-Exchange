@@ -25,26 +25,31 @@ PRODUCT_CONDITION = [
 ];
 
 const ProductSchema = new mongoose.Schema({
-    contactNumber: {
-        type: Number,
-        required: true,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
     },
+
     title: {
         type: String,
         required: true,
     },
+
     description: {
         type: String,
         required: false,
     },
+
     condition: {
         type: String,
         required: true,
     },
+
     primaryImage: {
         type: String,
         required: true,
     },
+
     secondryImages: [String],
 });
 
