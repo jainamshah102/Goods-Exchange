@@ -9,6 +9,6 @@ app.use(
     })
 );
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Serving @${PORT}`);
 });

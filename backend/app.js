@@ -1,11 +1,14 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+
 const UserRouter = require("./routes/user.route");
 const ProductRouter = require("./routes/product.route");
 const MessageRouter = require("./routes/messages.route");
+
 const NotFoundError = require("./errors/notFoundError");
 const cors = require("cors");
+
 mongoose
     .connect(process.env.MONGO_URL, {})
     .then(console.log("Connected to MongoDB"))
@@ -23,7 +26,7 @@ app.use(express.json());
 
 app.use("/user", UserRouter);
 app.use("/product", ProductRouter);
-app.use("/chat",MessageRouter)
+app.use("/chat", MessageRouter);
 
 app.all("*", (req, res, next) => {
     return next(new NotFoundError("Api does not exist."));
