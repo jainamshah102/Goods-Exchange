@@ -53,7 +53,6 @@ module.exports.userLogin = async (req, res, next) => {
                 },
                 process.env.SERVER_SECRET_KEY
             );
-
             return res.status(200).json({ user, token, success: true });
         }
 

@@ -19,3 +19,13 @@ module.exports.newProductJoi = async (body) => {
 
     return resp;
 };
+
+module.exports.viewProduct = async (body) => {
+    const schema = Joi.object({
+        id: Joi.string().required(),
+    });
+
+    const resp = await schema.validateAsync(body);
+
+    return resp;
+};

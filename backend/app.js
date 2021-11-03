@@ -20,7 +20,11 @@ app.use(
     })
 );
 
-app.use(cors());
+app.use(
+    cors({
+        origin: "*",
+    })
+);
 
 app.use(express.json());
 
@@ -43,5 +47,3 @@ app.use((err, req, res, next) => {
         message: err.message,
     });
 });
-
-module.exports = app;

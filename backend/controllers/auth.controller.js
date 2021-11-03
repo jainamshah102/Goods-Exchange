@@ -10,16 +10,9 @@ module.exports.verifyToken = (req, res, next) => {
         );
     }
 
-    try {
-        const decoded = jwt.verify(token, process.env.SERVER_SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SERVER_SECRET_KEY);
 
-        req.user = decoded;
+    req.user = decoded;
 
-        next();
-    } catch (err) {
-        return next(
-            new AuthenticationError("Invalid authentication token", 401)
-        );
-    }
-    return next();
+    next();
 };

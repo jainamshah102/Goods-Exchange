@@ -2,11 +2,16 @@ const InvalidParameters = require("../errors/invalidParameters");
 const Message = require("../models/message.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 const Conversation = require("../models/conversation.model");
+const ChatJoi = require("../joiValidation/chat.joi");
 
-module.exports.convquery = async (req, res, next) => {
+module.exports.fetchConversation = async (req, res, next) => {
     try {
+        const { userId } = await ChatJoi.fetchConversation(req.query);
+
         const user1 = new ObjectId(req.user.user_id);
-        const user2 = new ObjectId(req.query.userId);
+        const user2 = new ObjectId(userId);
+
+        console.log(user1, user2);
 
         const aggregate = Message.aggregate([
             {
@@ -45,15 +50,7 @@ module.exports.convquery = async (req, res, next) => {
                 "fromObj.date": 0,
             });
 
-        let messages = [];
-        aggregate.exec((err, result) => {
-            if (err) {
-                if (process.env.MODE == "development") console.log(err);
-                return err;
-            }
-            messages = result;
-            return result;
-        });
+        const messages = await aggregate.exec();
 
         return res.status(200).json({
             messages: messages,
@@ -66,7 +63,6 @@ module.exports.convquery = async (req, res, next) => {
 };
 
 module.exports.postMessage = async (req, res, next) => {
-    console.log(req.body);
     let from = new ObjectId(req.user.user_id);
     let to = new ObjectId(req.body.to);
 
@@ -98,7 +94,10 @@ module.exports.postMessage = async (req, res, next) => {
                     from: req.user.user_id,
                     body: req.body.body,
                 });
-                req.io.sockets.emit("messages", req.body.body);
+
+                req.io
+                    // sockets.
+                    .emit("messages", req.body.body);
                 message.save((err) => {
                     if (err) {
                         console.log(err);

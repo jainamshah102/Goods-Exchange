@@ -6,7 +6,7 @@ const userAuth = require("../controllers/auth.controller");
 messageRouter.get(
     "/messages",
     userAuth.verifyToken,
-    messageController.convquery
+    messageController.fetchConversation
 );
 
 messageRouter.post(

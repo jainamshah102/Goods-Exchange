@@ -18,9 +18,9 @@ module.exports.newProduct = async (req, res, next) => {
 
 module.exports.viewProduct = async (req, res, next) => {
     try {
-        const filters = await ProductJoi.viewProduct(req.params);
+        const filters = await ProductJoi.viewProduct(req.query);
 
-        const product = await Product.findOne(filters);
+        const product = await Product.findById(filters.id);
 
         if (!product) {
             if (process.env.MODE == "development") console.log(err);
