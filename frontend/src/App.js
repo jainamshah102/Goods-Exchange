@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
+import ViewProduct from './components/ViewProduct';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import About from './components/About';
@@ -28,6 +29,9 @@ function App() {
           </Route>
         </Switch>
         </div>
+      <Route exact path="/product/viewProduct">
+            <ViewProduct/>
+          </Route>
     </Router>
     </>
   );
