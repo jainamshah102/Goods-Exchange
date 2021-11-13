@@ -1,6 +1,10 @@
 import React from 'react'
 
-const viewProduct = () => {
+const viewProduct =  () => {
+  const response = fetch("http://localhost:8000/product/viewProduct",{
+    method:'GET'
+  });
+  console.log(response)
     return (
         <div class="album py-5 bg-light">
     <div class="container">
