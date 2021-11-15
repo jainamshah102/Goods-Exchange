@@ -1,3 +1,4 @@
+const { boolean, bool } = require("joi");
 const mongoose = require("mongoose");
 
 PRODUCT_CONDITION = [
@@ -51,6 +52,12 @@ const ProductSchema = new mongoose.Schema({
     },
 
     secondryImages: [String],
+
+    isExhanged: {
+        type: Boolean,
+        default: false,
+        required: true,
+    },
 });
 
 module.exports = mongoose.model("Product", ProductSchema);

@@ -2,8 +2,6 @@ const Joi = require("joi");
 
 module.exports.newProductJoi = async (body) => {
     const schema = Joi.object({
-        contactNumber: Joi.number().required(),
-
         title: Joi.string().required().min(3).max(50),
 
         description: Joi.string(),
@@ -23,6 +21,16 @@ module.exports.newProductJoi = async (body) => {
 module.exports.viewProduct = async (body) => {
     const schema = Joi.object({
         id: Joi.string().required(),
+    });
+
+    const resp = await schema.validateAsync(body);
+
+    return resp;
+};
+
+module.exports.userProducts = async (body) => {
+    const schema = Joi.object({
+        user_id: Joi.string().required(),
     });
 
     const resp = await schema.validateAsync(body);
