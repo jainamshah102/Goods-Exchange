@@ -1,6 +1,5 @@
 require("dotenv").config();
 const PORT = process.env.PORT;
-// const app = require("./app");
 
 const express = require("express");
 const app = express();
@@ -8,7 +7,7 @@ const mongoose = require("mongoose");
 
 const UserRouter = require("./routes/user.route");
 const ProductRouter = require("./routes/product.route");
-const MessageRouter = require("./routes/messages.route");
+const ChatRouter = require("./routes/chat.route");
 
 const NotFoundError = require("./errors/notFoundError");
 const cors = require("cors");
@@ -43,7 +42,7 @@ app.use((req, res, next) => {
 
 app.use("/user", UserRouter);
 app.use("/product", ProductRouter);
-app.use("/chat", MessageRouter);
+app.use("/chat", ChatRouter);
 
 app.all("*", (req, res, next) => {
     return next(new NotFoundError("Api does not exist."));
@@ -60,11 +59,3 @@ app.use((err, req, res, next) => {
         message: err.message,
     });
 });
-
-// const server = app.listen(PORT, () => {
-//     console.log(`Serving @${PORT}`);
-// });
-
-// const io = require("socket.io")();
-
-// const io = require("socket.io")(server);
