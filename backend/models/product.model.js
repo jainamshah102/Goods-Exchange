@@ -46,12 +46,10 @@ const ProductSchema = new mongoose.Schema({
         required: true,
     },
 
-    primaryImage: {
-        type: String,
+    images: {
+        type: [String],
         required: true,
     },
-
-    secondryImages: [String],
 
     isExhanged: {
         type: Boolean,

@@ -1,3 +1,6 @@
+const Grid = require("gridfs-stream");
+const mongoose = require("mongoose");
+
 const InvalidParameters = require("../errors/invalidParameters");
 const NotFound = require("../errors/notFoundError");
 const Product = require("../models/product.model");
@@ -64,5 +67,27 @@ module.exports.viewProduct = async (req, res, next) => {
     } catch (err) {
         if (process.env.MODE == "development") console.log(err);
         next(new InvalidParameters("Invalid Parameters"));
+    }
+};
+
+let gfs;
+
+const conn = mongoose.connection;
+
+conn.once("open", function () {
+    gfs = Grid(conn.db, mongoose.mongo);
+
+    gfs.collection("photos");
+});
+
+module.exports.viewProductImage = async (req, res, next) => {
+    try {
+        const file = await gfs.files.findOne({ filename: req.params.filename });
+
+        const readStream = gfs.createReadStream(file.filename);
+
+        readStream.pipe(res);
+    } catch (error) {
+        next(new NotFound("Image not found"));
     }
 };

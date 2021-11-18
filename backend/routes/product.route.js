@@ -2,6 +2,7 @@ const express = require("express");
 const ProductRouter = express.Router();
 const productController = require("../controllers/product.controller");
 const userAuth = require("../controllers/auth.controller");
+const upload = require("../services/image.upload");
 
 ProductRouter.get(
     "/listProduct",
@@ -12,6 +13,7 @@ ProductRouter.get(
 ProductRouter.post(
     "/newProduct",
     userAuth.verifyToken,
+    upload.array("images", 10),
     productController.newProduct
 );
 
@@ -26,5 +28,7 @@ ProductRouter.get(
     userAuth.verifyToken,
     productController.userProducts
 );
+
+ProductRouter.get("/image/:filename", productController.viewProductImage);
 
 module.exports = ProductRouter;

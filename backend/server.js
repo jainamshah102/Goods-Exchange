@@ -2,12 +2,18 @@ require("dotenv").config();
 const PORT = process.env.PORT;
 
 const express = require("express");
+
 const app = express();
 const mongoose = require("mongoose");
+const Grid = require("gridfs-stream");
+
+const connection = require("./services/mongodb.connection");
 
 const UserRouter = require("./routes/user.route");
 const ProductRouter = require("./routes/product.route");
 const ChatRouter = require("./routes/chat.route");
+
+const upload = require("./services/image.upload");
 
 const NotFoundError = require("./errors/notFoundError");
 const cors = require("cors");
@@ -16,10 +22,15 @@ const server = app.listen(PORT, () => console.log(`Serving @${PORT}`));
 
 const io = require("socket.io")(server);
 
-mongoose
-    .connect(process.env.MONGO_URL, {})
-    .then(console.log("Connected to MongoDB"))
-    .catch((err) => console.log(err));
+connection();
+let gfs;
+
+const conn = mongoose.connection;
+
+conn.once("open", () => {
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection("photos");
+});
 
 app.use(
     express.urlencoded({

@@ -8,9 +8,7 @@ module.exports.newProductJoi = async (body) => {
 
         condition: Joi.string().required(),
 
-        primaryImage: Joi.string().required(),
-
-        secondryImages: Joi.array().items(Joi.string()),
+        images: Joi.array().items(Joi.string()).required(),
     });
 
     const resp = await schema.validateAsync(body);
