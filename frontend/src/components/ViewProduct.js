@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react'
-
+import { Link} from "react-router-dom";
 const ViewProduct =  () => {
   const [product, setProduct] = useState([]);
     
@@ -34,7 +34,7 @@ const ViewProduct =  () => {
                   <div className="d-flex justify-content-between align-items-center">
                     <div className="btn-group">
                       <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
+                      <button type="button" className="btn btn-sm btn-outline-secondary"><Link to="/chat">Chat</Link></button>
                     </div>
                     <small className="text-muted">9 mins</small>
                   </div>

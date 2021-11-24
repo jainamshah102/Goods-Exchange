@@ -7,6 +7,7 @@ import Home from './components/Home';
 import About from './components/About';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import Chat from './components/Chat';
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
         </div>
       <Route exact path="/product/viewProduct">
             <ViewProduct/>
+          </Route>
+          <Route exact path="/chat">
+            <Chat/>
           </Route>
     </Router>
     </>
