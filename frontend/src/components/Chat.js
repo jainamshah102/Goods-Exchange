@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 const Chat = () => {
     const [scope, setScope] = useState('Global Chat');
     const [tab, setTab] = useState(0);
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
     const classes = useStyles();
 
     const handleChange = (e, newVal) => {
@@ -55,7 +55,7 @@ const Chat = () => {
                                 textColor="primary"
                             >
                                 <Tab label="Chats" />
-                                <Tab label="Users" />
+                                {/* <Tab label="Users" /> */}
                             </Tabs>
                         </Paper>
                         {/* {tab === 0 && (
