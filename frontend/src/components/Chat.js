@@ -3,17 +3,17 @@ import React from 'react'
 import '../css/styles.css'
 const Chat = () => {
     return (
-        <div className="container">
+        <div className="container my-4">
             <div className="row">
-                <div className="col-sm" style={{border:"2px solid black"}}>
+                <div className="col-sm" style={{border:"2px solid black",borderRadius:"13px", maxWidth:"500px"}}>
                     Chats
             
-                    <ul className="list-group my-4" style={{width: "500px"}}>
-                        <li className="list-group-item">Jainam</li>
-                        <li className="list-group-item">Swanand</li>
-                        <li className="list-group-item">Dhairya</li>
-                        <li className="list-group-item">A</li>
-                        <li className="list-group-item">B</li>
+                    <ul className="list-group my-4">
+                        <li className="list-group-item" style={{height:"54px"}}>Jainam</li>
+                        <li className="list-group-item" style={{height:"54px"}}>Swanand</li>
+                        <li className="list-group-item" style={{height:"54px"}}>Dhairya</li>
+                        <li className="list-group-item" style={{height:"54px"}}>A</li>
+                        <li className="list-group-item" style={{height:"54px"}}>B</li>
                     </ul>
                     
                 </div>
