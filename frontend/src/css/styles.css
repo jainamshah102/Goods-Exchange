@@ -1,0 +1,11 @@
+.container2{
+    max-width: 700px;
+    border: 2px solid black;
+    border-radius: 13px;
+    margin: auto;
+    height: 80vh;
+    padding: 33px;
+    overflow-y: auto;
+    margin-bottom: 23px;
+    display: flex;
+}
