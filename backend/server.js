@@ -13,8 +13,6 @@ const UserRouter = require("./routes/user.route");
 const ProductRouter = require("./routes/product.route");
 const ChatRouter = require("./routes/chat.route");
 
-const upload = require("./services/image.upload");
-
 const NotFoundError = require("./errors/notFoundError");
 const cors = require("cors");
 

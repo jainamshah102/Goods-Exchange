@@ -2,7 +2,7 @@ const express = require("express");
 const ProductRouter = express.Router();
 const productController = require("../controllers/product.controller");
 const userAuth = require("../controllers/auth.controller");
-const upload = require("../services/image.upload");
+const upload = require("../services/product.image.upload");
 
 ProductRouter.get(
     "/listProduct",

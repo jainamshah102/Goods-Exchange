@@ -2,8 +2,13 @@ const express = require("express");
 const UserRouter = express.Router();
 const userController = require("../controllers/user.controller");
 const userAuth = require("../controllers/auth.controller");
+const upload = require("../services/profile.image.upload");
 
-UserRouter.post("/register", userController.userRegister);
+UserRouter.post(
+    "/register",
+    upload.single("profilePic"),
+    userController.userRegister
+);
 UserRouter.post("/login", userController.userLogin);
 
 UserRouter.put("/update", userAuth.verifyToken, userController.userUpdate);

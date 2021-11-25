@@ -6,9 +6,7 @@ module.exports.userRegisterJoi = async (body) => {
 
         lastName: Joi.string().required(),
 
-        email: Joi.string()
-            .email({ tlds: { allow: ["com", "net"] } })
-            .default(""),
+        email: Joi.string().email({ tlds: { allow: ["com", "net"] } }),
 
         password: Joi.string().required(),
 
