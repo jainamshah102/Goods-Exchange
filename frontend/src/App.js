@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import ViewProduct from './components/ViewProduct';
+import NewProduct from './components/NewProduct';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import About from './components/About';
@@ -32,6 +33,9 @@ function App() {
         </div>
       <Route exact path="/product/viewProduct">
             <ViewProduct/>
+          </Route>
+          <Route exact path="/product/newProduct">
+            <NewProduct/>
           </Route>
           <Route exact path="/chat">
             <Chat/>
