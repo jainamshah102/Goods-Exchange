@@ -1,79 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { Link} from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-
-// import Header from '../Layout/Header';
-// import ChatBox from './ChatBox';
-// import Conversations from './Conversations';
-// import Users from './Users';
-const useStyles = makeStyles(theme => ({
-    paper: {
-        minHeight: 'calc(100vh - 64px)',
-        borderRadius: 0,
-    },
-    sidebar: {
-        zIndex: 8,
-    },
-    subheader: {
-        display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer',
-    },
-    globe: {
-        backgroundColor: theme.palette.primary.dark,
-    },
-    subheaderText: {
-        color: theme.palette.primary.dark,
-    },
-}));
+import { StylesContext } from '@material-ui/styles'
+import React from 'react'
+import '../css/styles.css'
+import sendbtn from '../sendbtn.png'
 const Chat = () => {
-    const [scope, setScope] = useState('Global Chat');
-    const [tab, setTab] = useState(0);
-    // const [user, setUser] = useState(null);
-    const classes = useStyles();
-
-    const handleChange = (e, newVal) => {
-        setTab(newVal);
-    };
     return (
-        <React.Fragment>
-            {/* <Header /> */}
-            <Grid container>
-                <Grid item md={4} className={classes.sidebar}>
-                    <Paper className={classes.paper} square elevation={5}>
-                        <Paper square>
-                            <Tabs
-                                onChange={handleChange}
-                                variant="fullWidth"
-                                value={tab}
-                                indicatorColor="primary"
-                                textColor="primary"
-                            >
-                                <Tab label="Chats" />
-                                {/* <Tab label="Users" /> */}
-                            </Tabs>
-                        </Paper>
-                        {/* {tab === 0 && (
-                            // <Conversations
-                            //     setUser={setUser}
-                            //     setScope={setScope}
-                            // />
-                        )} */}
-                        {/* {tab === 1 && (
-                            <Users setUser={setUser} setScope={setScope} />
-                        )} */}
-                    </Paper>
-                </Grid>
-                <Grid item md={8}>
-                    {/* <ChatBox scope={scope} user={user} /> */}
-                </Grid>
-            </Grid>
-        </React.Fragment>
+        <div className="container my-4">
+            <div className="row">
+                <div className="col-sm" style={{border:"2px solid black",borderRadius:"13px", maxWidth:"500px"}}>
+                    <p style={{textAlign:"center",color:"#008080",opacity:"0.8",fontWeight:"900",fontFamily:"sans-serif"}}>CHATS</p>
+            
+                    <ul className="list-group my-4">
+                        <li className="list-group-item" style={{height:"54px"}}>Jainam</li>
+                        <li className="list-group-item" style={{height:"54px"}}>Swanand</li>
+                        <li className="list-group-item" style={{height:"54px"}}>Dhairya</li>
+                        <li className="list-group-item" style={{height:"54px"}}>A</li>
+                        <li className="list-group-item" style={{height:"54px"}}>B</li>
+                    </ul>
+                    
+                </div>
+                <div className="col-sm">
+                    <div className="container2">
+                    </div> 
+                    <div className="send">
+                        <form action="#" className="d-flex" id="send-container" style={{float:'right'}}>
+                            <input type="text" name="messageInp" id="messageInp" style={{width:"720px"}} /> 
+                            <button className="btn" type="submit"><img src={sendbtn} style={{width:"20px",height:"20px"}}/></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        // <div className="mx-4 my-5 mw-50px" style={{border:"2px solid black"},{width:"600px"}}>
+        //     <div className="p-4 d-flex flex-row bd-highlight mb-3" style={{color: "blue"},{display:"flex"}}>
+        //         Chats
+            
+        //         <ul className="list-group my-4" style={{width: "500px"}}>
+        //             <li className="list-group-item">Jainam</li>
+        //             <li className="list-group-item">Swanand</li>
+        //             <li className="list-group-item">Dhairya</li>
+        //             <li className="list-group-item">A</li>
+        //             <li className="list-group-item">B</li>
+        //         </ul>
+        //     </div>
+        //     <div className="container2">
+        //     </div> 
+        //     <div className="send">
+        //         <form action="#" id="send-container">
+        //             <input type="text" name="messageInp" id="messageInp"/>
+        //             <button className="btn" type="submit">Send</button>
+        //         </form>
+        //     </div>
+        // </div>
+        
     )
 }
 
