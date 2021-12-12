@@ -1,44 +1,75 @@
-import logo from './logo.svg';
-import './App.css';
-import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import ViewProduct from './components/ViewProduct';
-import Navbar from './components/Navbar';
-import Home from './components/Home';
-import About from './components/About';
-import Signup from './components/Signup';
-import Login from './components/Login';
-import Chat from './components/Chat';
+import { config } from "dotenv";
+import logo from "./logo.svg";
+import "./App.css";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
+import Home from "./components/pages/Home";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+import NotFound from "./components/pages/NotFound";
+import { useState, useEffect } from "react";
+import UserContext from "./context/UserContext";
+config();
 
 function App() {
-  return (
-    <>
-    <Router>
-      <Navbar/>
-      <div className="container">
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/about">
-            <About/>
-          </Route>
-          <Route exact path="/login">
-            <Login/>
-          </Route>
-          <Route exact path="/signup">
-            <Signup/>
-          </Route>
-        </Switch>
-        </div>
-      <Route exact path="/product/viewProduct">
-            <ViewProduct/>
-          </Route>
-          <Route exact path="/chat">
-            <Chat/>
-          </Route>
-    </Router>
-    </>
-  );
+    const [userData, setUserData] = useState({
+        token: undefined,
+        user: undefined,
+    });
+
+    useEffect(() => {
+        const checkLoggedIn = async () => {
+            console.log(process.env.API_URL);
+            let token = localStorage.getItem("token");
+
+            if (token === null) {
+                localStorage.setItem("token", "");
+                token = "";
+            }
+            const tokenResponse = await (
+                await fetch(`http://localhost:8000/user/`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-access-token": token.toString(),
+                    },
+                })
+            ).json();
+
+            if (tokenResponse && tokenResponse.success) {
+                setUserData({
+                    token,
+                    user: tokenResponse.user,
+                });
+            }
+        };
+
+        checkLoggedIn();
+    }, []);
+
+    return (
+        <BrowserRouter>
+            <UserContext.Provider value={{ userData, setUserData }}>
+                <h1>{JSON.stringify(userData)}</h1>
+                <Switch>
+                    <Route exact path="/" component={Home}></Route>
+
+                    <Route exact path="/login">
+                        <Login></Login>
+                    </Route>
+
+                    <Route exact path="/register">
+                        <Register></Register>
+                    </Route>
+
+                    <Route exact path="/logout"></Route>
+
+                    <Route path="*">
+                        <NotFound></NotFound>
+                    </Route>
+                </Switch>
+            </UserContext.Provider>
+        </BrowserRouter>
+    );
 }
 
 export default App;

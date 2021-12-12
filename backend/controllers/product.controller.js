@@ -23,8 +23,8 @@ module.exports.newProduct = async (req, res, next) => {
 
 module.exports.listProducts = async (req, res, next) => {
     try {
-        const products = await Product.find();
-        console.log(products)
+        const products = await Product.find({ isExchanged: false });
+
         return res.status(200).json({
             success: true,
             products,

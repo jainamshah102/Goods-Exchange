@@ -1,4 +1,3 @@
-const { boolean, bool } = require("joi");
 const mongoose = require("mongoose");
 
 PRODUCT_CONDITION = [
@@ -51,7 +50,7 @@ const ProductSchema = new mongoose.Schema({
         required: true,
     },
 
-    isExhanged: {
+    isExchanged: {
         type: Boolean,
         default: false,
         required: true,

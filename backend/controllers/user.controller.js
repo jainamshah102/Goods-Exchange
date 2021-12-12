@@ -4,6 +4,32 @@ const InvalidParameters = require("../errors/invalidParameters");
 const AuthenticationError = require("../errors/authenticationError");
 const User = require("../models/user.model");
 const UserJoi = require("../joiValidation/user.joi");
+require("lodash");
+
+module.exports.verifyToken = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.user_id, {
+            email: false,
+            password: false,
+            _id: false,
+            createdAt: false,
+            updatedAt: false,
+        });
+
+        if (user)
+            return res.status(200).json({
+                success: true,
+                user,
+            });
+
+        return res.status(404).json({
+            success: false,
+        });
+    } catch (err) {
+        if (process.env.MODE == "development") console.log(err);
+        next(new InvalidParameters("Invalid Parameters"));
+    }
+};
 
 module.exports.userRegister = async (req, res, next) => {
     try {
@@ -29,6 +55,12 @@ module.exports.userRegister = async (req, res, next) => {
             process.env.SERVER_SECRET_KEY
         );
 
+        user.email = undefined;
+        user.password = undefined;
+        user._id = undefined;
+        user.createdAt = undefined;
+        user.updatedAt = undefined;
+
         res.status(201).json({ user, token, success: true });
     } catch (err) {
         console.log(err);
@@ -43,7 +75,7 @@ module.exports.userLogin = async (req, res, next) => {
             req.body
         );
 
-        const user = await User.findOne({ contactNumber });
+        let user = await User.findOne({ contactNumber });
 
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = jwt.sign(
@@ -53,6 +85,13 @@ module.exports.userLogin = async (req, res, next) => {
                 },
                 process.env.SERVER_SECRET_KEY
             );
+
+            user.email = undefined;
+            user.password = undefined;
+            user._id = undefined;
+            user.createdAt = undefined;
+            user.updatedAt = undefined;
+
             return res.status(200).json({ user, token, success: true });
         }
 
