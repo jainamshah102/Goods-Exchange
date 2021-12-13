@@ -35,10 +35,12 @@ const Login = (props) => {
                 user: userRes.user,
             });
             history.push("/");
+            props.showAlert("Logged in Successfully","success")
         } else {
             // alert("Invalid credentials");
-            setMessage('Invalid credentials')
-            console.log(message)
+            // setMessage('Invalid credentials')
+            // console.log(message)
+            props.showAlert("Invalid Details","danger")
         }
     };
 

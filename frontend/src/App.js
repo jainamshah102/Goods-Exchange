@@ -11,7 +11,7 @@ import UserContext from "./context/UserContext";
 import ListProduct from "./components/ListProduct";
 import Chat from "./components/Chat";
 import About from "./components/About";
-
+import Alert from './components/Alert';
 config();
 
 function App() {
@@ -19,7 +19,16 @@ function App() {
         token: undefined,
         user: undefined,
     });
-
+    const [alert,setAlert] = useState(null);
+    const showAlert = (message,type)=>{
+        setAlert({
+            msg:message,
+            type:type
+        })
+        setTimeout(()=>{
+            setAlert(null);
+        },1500);
+    }
     useEffect(() => {
         const checkLoggedIn = async () => {
             console.log(process.env.API_URL);
@@ -52,6 +61,8 @@ function App() {
     }, []);
 
     return (
+        <>
+        <Alert alert={alert}/>
         <BrowserRouter>
             <UserContext.Provider value={{ userData, setUserData }}>
                 <h1>{JSON.stringify(userData)}</h1>
@@ -59,14 +70,14 @@ function App() {
             <About/>
           </Route>
                 <Switch>
-                    <Route exact path="/" component={Home}></Route>
+                    <Route exact path="/" ><Home /></Route>
 
                     <Route exact path="/login">
-                        <Login></Login>
+                        <Login showAlert={showAlert}/>
                     </Route>
 
                     <Route exact path="/register">
-                        <Register></Register>
+                        <Register showAlert={showAlert}/>
                     </Route>
 
                     <Route exact path="/logout"></Route>
@@ -83,6 +94,8 @@ function App() {
             <ListProduct/>
           </Route>
         </BrowserRouter>
+        
+        </>
     );
 }
 

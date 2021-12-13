@@ -5,7 +5,7 @@ import UserContext from "../../context/UserContext";
 
 const Home = () => {
     const { userData, setUserData } = useContext(UserContext);
-
+    
     return (
         <>
             <Header></Header>
