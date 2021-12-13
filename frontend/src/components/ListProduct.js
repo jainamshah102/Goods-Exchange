@@ -22,6 +22,7 @@ const ListProduct = () => {
     console.log(productlist);
     return (
         <>
+        hello
             <div className="album py-5 bg-light">
                 <div className="container">
                     <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -33,7 +34,7 @@ const ListProduct = () => {
                                         className="bd-placeholder-img card-img-top"
                                         width="100%"
                                         height="225"
-                                        xmlns={prod.primaryImage}
+                                        xmlns={prod.images}
                                         role="img"
                                         aria-label="Placeholder: Thumbnail"
                                         preserveAspectRatio="xMidYMid slice"

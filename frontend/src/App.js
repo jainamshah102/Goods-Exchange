@@ -8,6 +8,10 @@ import Login from "./components/auth/Login";
 import NotFound from "./components/pages/NotFound";
 import { useState, useEffect } from "react";
 import UserContext from "./context/UserContext";
+import ListProduct from "./components/ListProduct";
+import Chat from "./components/Chat";
+import About from "./components/About";
+
 config();
 
 function App() {
@@ -40,6 +44,7 @@ function App() {
                     token,
                     user: tokenResponse.user,
                 });
+                
             }
         };
 
@@ -50,6 +55,9 @@ function App() {
         <BrowserRouter>
             <UserContext.Provider value={{ userData, setUserData }}>
                 <h1>{JSON.stringify(userData)}</h1>
+                <Route exact path="/about">
+            <About/>
+          </Route>
                 <Switch>
                     <Route exact path="/" component={Home}></Route>
 
@@ -63,11 +71,17 @@ function App() {
 
                     <Route exact path="/logout"></Route>
 
-                    <Route path="*">
+                    {/* <Route path="*">
                         <NotFound></NotFound>
-                    </Route>
+                    </Route> */}
                 </Switch>
+          <Route exact path="/chat">
+            <Chat/>
+          </Route>
             </UserContext.Provider>
+                <Route exact path="/product/viewProduct">
+            <ListProduct/>
+          </Route>
         </BrowserRouter>
     );
 }

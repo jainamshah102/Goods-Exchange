@@ -1,9 +1,12 @@
 import { StylesContext } from '@material-ui/styles'
 import React from 'react'
 import '../css/styles.css'
-import sendbtn from '../sendbtn.png'
+import sendbtn from '../sendbtn.png';
+import Header from "./layout/Header";
 const Chat = () => {
     return (
+        <>
+        <Header />
         <div className="container my-4">
             <div className="row">
                 <div className="col-sm" style={{border:"2px solid black",borderRadius:"13px", maxWidth:"500px"}}>
@@ -31,7 +34,7 @@ const Chat = () => {
             </div>
         </div>
         
-        // <div className="mx-4 my-5 mw-50px" style={{border:"2px solid black"},{width:"600px"}}>
+        {/* // <div className="mx-4 my-5 mw-50px" style={{border:"2px solid black"},{width:"600px"}}>
         //     <div className="p-4 d-flex flex-row bd-highlight mb-3" style={{color: "blue"},{display:"flex"}}>
         //         Chats
             
@@ -51,8 +54,8 @@ const Chat = () => {
         //             <button className="btn" type="submit">Send</button>
         //         </form>
         //     </div>
-        // </div>
-        
+        // </div> */}
+    </>
     )
 }
 
