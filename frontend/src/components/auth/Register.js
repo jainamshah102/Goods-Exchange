@@ -11,32 +11,37 @@ const Signup = () => {
         contactNumber: "",
         gender: "",
     });
+
+    const [file, setFile] = useState(null);
+
+    const onChangeImageHandler = (event) => {
+        setFile(event.target.files[0]);
+    };
+
     let history = useHistory();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const {
-            firstName,
-            lastName,
-            email,
-            password,
-            dob,
-            contactNumber,
-            gender,
-        } = credentials;
+        // const {
+        //     firstName,
+        //     lastName,
+        //     email,
+        //     password,
+        //     dob,
+        //     contactNumber,
+        //     gender,
+        // } = credentials;
+        const formData = new FormData();
+
+        console.log(file);
+        formData.append("profilePic", file);
+
+        for (const key in credentials)
+            formData.append(key.toString(), credentials[key]);
+
         const response = await fetch("http://localhost:8000/user/register", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                firstName,
-                lastName,
-                email,
-                password,
-                dob,
-                contactNumber,
-                gender,
-            }),
+            headers: {},
+            body: formData,
         });
         const json = await response.json();
         console.log(json);
@@ -55,11 +60,13 @@ const Signup = () => {
             [e.target.name]: e.target.value,
         });
     };
+
     return (
         <div className="container">
             <form onSubmit={handleSubmit}>
+                {/* <h1>{file}</h1> */}
                 {/* <div className = "mb-3">
-        <label htmlFor = "username" className = "form-label" > Username </label> 
+        <label htmlFor = "username" className = "form-label" > Username </label>
         <input type = "text" className = "form-control" id="username" name="username" onChange = {onChange} aria-describedby="emailHelp" / >
       </div> */}
                 <div className="mb-3">
@@ -156,6 +163,18 @@ const Signup = () => {
                         onChange={onChange}
                     />
                 </div>
+
+                <div className="mb-3">
+                    <label htmlFor="profilePic" className="form-label">
+                        Profile Picture
+                    </label>
+                    <input
+                        type="file"
+                        name="profiePic"
+                        onChange={onChangeImageHandler}
+                    />
+                </div>
+
                 <button type="submit" className="btn btn-primary">
                     {" "}
                     Submit{" "}

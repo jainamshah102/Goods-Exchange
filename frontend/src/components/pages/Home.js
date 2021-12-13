@@ -1,6 +1,5 @@
-import { useEffect, useContext } from "react";
-import { useHistory } from "react-router-dom";
-import Navbar from "../Navbar";
+import { useContext } from "react";
+import Header from "../layout/Header";
 import UserContext from "../../context/UserContext";
 
 const Home = () => {
@@ -8,7 +7,7 @@ const Home = () => {
 
     return (
         <div>
-            <Navbar></Navbar>
+            <Header></Header>
             {userData.user ? (
                 <h1>Welcome to home page</h1>
             ) : (

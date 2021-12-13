@@ -33,6 +33,7 @@ module.exports.verifyToken = async (req, res, next) => {
 
 module.exports.userRegister = async (req, res, next) => {
     try {
+        console.log(req.body);
         const newUser = await UserJoi.userRegisterJoi(req.body);
         const checkUser = await Promise.all([
             User.findOne({ email: newUser.email }).exec(),
