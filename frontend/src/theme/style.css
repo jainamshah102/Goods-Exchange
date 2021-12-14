@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;600;800&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+@import url('http://fonts.cdnfonts.com/css/airbnb-cereal-app');
+
+@media only screen and (max-width: 576px) {
+  .table__sm_hide {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .table__md__hide {
+    display: none;
+  }
+}
+
+* {
+  /* border: 1px solid blue; */
+  font-family: 'Airbnb Cereal App', 'IBM Plex Sans', sans-serif !important;
+  /* font-family: 'IBM Plex Sans', sans-serif !important; */
+  text-transform: capitalizes;
+}
+.logo__text {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+}
+
+.menu__text {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+.heading__title {
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+}
+
+.heading__sub_title {
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+}
+
+.post__title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+.post__sub_title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+.contain__text {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
+.contain__text_small {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+* :not(nav, td) {
+  border-radius: 1.078em !important;
+}
+
+.card {
+  border-radius: 1.078em !important;
+  border: 1px solid rgb(221, 221, 221) !important;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px !important;
+}
+.list-group-item {
+  padding: 8px !important;
+}
+
+body,
+#root {
+  height: 100vh;
+}
+
+button,
+.btn {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: black !important;
+  text-transform: uppercase !important;
+  padding: 8px 10px !important;
+}
+h1,
+h2,
+h3,
+h4,
+.btn,
+button {
+  color: black;
+  text-transform: uppercase;
+
+  /* font-family: 'Kanit', sans-serif !important; */
+}
+
+a,
+input,
+button {
+  border-radius: 1.1em !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.product-item {
+  border: 1px solid #ddd;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+}
+
+.custom-bg-color-primary {
+  background-color: #375a7f;
+}
+.custom-bg-color-secondary {
+  background-color: #444;
+}
+.custom-bg-color-success {
+  background-color: #00bc8c;
+}
+.custom-bg-color-info {
+  background-color: #3498db;
+}
+.custom-bg-color-warning {
+  background-color: #f39c12;
+}
+.custom-bg-color-danger {
+  background-color: #e74c3c;
+}
