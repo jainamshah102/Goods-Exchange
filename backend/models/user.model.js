@@ -1,65 +1,71 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
 
-GENDERS = {
-    male: "M",
-    female: "F",
-    other: "O",
-};
-
-const UserSchema = new mongoose.Schema(
-    {
-        firstName: {
-            type: String,
-            required: true,
-        },
-
-        lastName: {
-            type: String,
-            required: true,
-        },
-
-        email: {
-            type: String,
-            required: false,
-            unique: true,
-        },
-
-        password: {
-            type: String,
-            required: true,
-        },
-
-        profilePic: {
-            type: String,
-            default: "",
-        },
-
-        gender: {
-            type: String,
-            max: 1,
-            min: 1,
-            default: GENDERS.other,
-        },
-
-        dob: {
-            type: Date,
-            required: true,
-        },
-
-        contactNumber: {
-            type: Number,
-            unique: true,
-            required: true,
-        },
-
-        isActive: {
-            type: Boolean,
-            defualt: true,
-        },
+const userSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    {
-        timestamps: true,
-    }
-);
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
 
-module.exports = mongoose.model("User", UserSchema);
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    numSuccessTX: {
+      type: Number,
+      default: 0,
+    },
+    numFeedback: {
+      type: Number,
+      default: 0,
+    },
+    shipping: {
+      lastName: { type: String, default: null },
+      firstName: { type: String, default: null },
+      phoneNumber: { type: String, default: null },
+      addressNo: { type: String, default: null },
+      street: { type: String, default: null },
+      city: { type: String, default: null },
+      province: { type: String, default: null },
+      memo: { type: String, default: null },
+    },
+  },
+  {
+    timestamps: true,
+  }
+)
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password)
+}
+
+userSchema.pre('save', async function (next) {
+  // Not encrypt if not change password
+  if (!this.isModified('password')) {
+    next()
+  }
+
+  const salt = await bcrypt.genSalt(10)
+  this.password = await bcrypt.hash(this.password, salt)
+})
+
+const User = mongoose.model('User', userSchema)
+
+module.exports = User
+
