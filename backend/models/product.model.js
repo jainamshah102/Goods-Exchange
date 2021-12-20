@@ -1,60 +1,124 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-PRODUCT_CONDITION = [
-    "Acceptable",
-    "Brand New",
-    "Certified Pre-Owned",
-    "Damaged",
-    "For Parts",
-    "Good",
-    "Like New",
-    "Manufacturer Refurbished",
-    "New",
-    "New Other",
-    "New With Box",
-    "New With Defects",
-    "New With Tags",
-    "New Without Box",
-    "New Without Tags",
-    "Pre-Owned",
-    "Remanufactured",
-    "Retread",
-    "Seller Refurbished",
-    "Used",
-    "Very Good",
-];
-
-const ProductSchema = new mongoose.Schema({
+commentSchema = mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    text: { type: String, required: true },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
     },
+  },
+  {
+    timestamps: true,
+  }
+)
 
+likeSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  }
+)
+
+requestFromSchema = mongoose.Schema(
+  {
+    item: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Product',
+    },
+  },
+  {
+    timestamps: true,
+  }
+)
+
+tradeToSchema = mongoose.Schema({
+  status: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  item: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Product',
+  },
+  title: {
+    type: String,
+    required: true,
+    default: null,
+  },
+  image: {
+    type: String,
+    required: true,
+    default: null,
+  },
+})
+
+const productSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    userName: {
+      type: String,
+      required: true,
+    },
     title: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
-
     description: {
-        type: String,
-        required: false,
+      type: String,
+      required: true,
     },
-
-    condition: {
-        type: String,
-        required: true,
+    location: {
+      type: String,
+      required: true,
     },
-
-    images: {
-        type: [String],
-        required: true,
+    image: {
+      type: String,
+      required: true,
     },
-
-    isExchanged: {
-        type: Boolean,
-        default: false,
-        required: true,
+    wishList: {
+      type: String,
     },
-});
+    numComments: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    comments: [commentSchema],
+    numLikes: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    likes: [likeSchema],
+    numRequests: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    requestsFrom: [requestFromSchema],
+    tradeTo: tradeToSchema,
+  },
+  {
+    timestamps: true,
+  }
+)
 
-module.exports = mongoose.model("Product", ProductSchema);
+const Product = mongoose.model('Product', productSchema)
+
+module.exports = Product
