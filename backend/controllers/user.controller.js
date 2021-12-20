@@ -1,109 +1,155 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const InvalidParameters = require("../errors/invalidParameters");
-const AuthenticationError = require("../errors/authenticationError");
+const asyncHandler = require("express-async-handler");
+const createToken = require("../utils/createToken");
 const User = require("../models/user.model");
-const UserJoi = require("../joiValidation/user.joi");
-require("lodash");
+const filter = require("../utils/filter");
+/**
+ * @Desc   Auth user login
+ * @Route  POST /api/users/login
+ * @Access Public
+ */
+exports.authUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
 
-module.exports.verifyToken = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.user.user_id, {
-            email: false,
-            password: false,
-            _id: false,
-            createdAt: false,
-            updatedAt: false,
-        });
-
-        if (user)
-            return res.status(200).json({
-                success: true,
-                user,
-            });
-
-        return res.status(404).json({
-            success: false,
-        });
-    } catch (err) {
-        if (process.env.MODE == "development") console.log(err);
-        next(new InvalidParameters("Invalid Parameters"));
+    if (!email || !password) {
+        throw new Error("Vui lòng điền đủ thông tin!");
     }
-};
 
-module.exports.userRegister = async (req, res, next) => {
-    try {
-        console.log(req.body);
-        const newUser = await UserJoi.userRegisterJoi(req.body);
-        const checkUser = await Promise.all([
-            User.findOne({ email: newUser.email }).exec(),
-            User.findOne({ contactNumber: newUser.contactNumber }).exec(),
+    const user = await User.findOne({ email });
+
+    if (!user) throw new Error("Email không tồn tại!");
+
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch) throw new Error("Sai mật khẩu!");
+
+    res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        token: createToken(user._id),
+    });
+});
+
+/**
+ * @Desc   Register new user
+ * @Route  POST /api/users/register
+ * @Access Public
+ */
+exports.registerNewUser = asyncHandler(async (req, res) => {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+        throw new Error("Vui lòng điền đủ thông tin!");
+    }
+
+    const isUserExist = await User.findOne({ email });
+
+    if (isUserExist) {
+        throw new Error("Email đã tồn tại!");
+    }
+
+    const user = new User({ email, name, password, shipping: {} });
+
+    await user.save();
+
+    if (!user) {
+        throw new Error("User not valid!");
+    } else {
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: createToken(user._id),
+        });
+    }
+});
+
+/**
+ * @Desc   Get user profile
+ * @Route  GET /api/users/profile
+ * @Access Private
+ */
+exports.getUserProfile = asyncHandler(async (req, res) => {
+    const id = req.user._id;
+    const user = await User.findById(id).select("-password");
+    if (!user) {
+        throw new Error("Email không tồn tại!");
+    } else {
+        res.json(user);
+    }
+});
+
+/**
+ * @Desc   Update user profile
+ * @Route  PUT /api/users/profile
+ * @Access Private
+ */
+exports.updateUserProfile = asyncHandler(async (req, res) => {
+    const _id = req.user._id;
+    const user = await User.findById(_id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    const {
+        name,
+        email,
+        password,
+        lastName,
+        firstName,
+        phoneNumber,
+        addressNo,
+        street,
+        city,
+        province,
+        memo,
+    } = req.body;
+
+    let userUpdateProfile = filter.loginNotChange({ name, email }, user);
+
+    const isMatch = await user.matchPassword(password);
+
+    if (password && !isMatch) {
+        userUpdateProfile.password = password;
+    }
+
+    await User.update({ _id }, userUpdateProfile, {
+        upsert: true,
+        omitUndefined: true,
+    });
+
+    userUpdateProfile = filter.shippingNotChange(
+        {
+            lastName,
+            firstName,
+            phoneNumber,
+            addressNo,
+            street,
+            city,
+            province,
+            memo,
+        },
+        user
+    );
+    const isEmpty =
+        Object.keys(userUpdateProfile).length === 0 &&
+        userUpdateProfile.constructor === Object;
+
+    if (!isEmpty) {
+        await User.updateOne({ _id }, [
+            { $set: { shipping: userUpdateProfile } },
         ]);
-
-        if (checkUser[1] || checkUser[2])
-            return next(new InvalidParameters("User already exists."));
-
-        const encryptedPassword = await bcrypt.hash(newUser.password, 12);
-        newUser.password = encryptedPassword;
-
-        const user = await User.create(newUser);
-
-        const token = jwt.sign(
-            {
-                user_id: user._id,
-                contactNumber: user.contactNumber,
-            },
-            process.env.SERVER_SECRET_KEY
-        );
-
-        user.email = undefined;
-        user.password = undefined;
-        user._id = undefined;
-        user.createdAt = undefined;
-        user.updatedAt = undefined;
-
-        res.status(201).json({ user, token, success: true });
-    } catch (err) {
-        console.log(err);
-        if (process.env.MODE == "development") console.log(err);
-        next(new InvalidParameters("Invalid Parameters"));
     }
-};
 
-module.exports.userLogin = async (req, res, next) => {
-    try {
-        const { contactNumber, password } = await UserJoi.userLoginJoi(
-            req.body
-        );
+    const updatedUser = await User.findOne({ _id });
 
-        let user = await User.findOne({ contactNumber });
-
-        if (user && (await bcrypt.compare(password, user.password))) {
-            const token = jwt.sign(
-                {
-                    user_id: user._id,
-                    contactNumber: user.contactNumber,
-                },
-                process.env.SERVER_SECRET_KEY
-            );
-
-            user.email = undefined;
-            user.password = undefined;
-            user._id = undefined;
-            user.createdAt = undefined;
-            user.updatedAt = undefined;
-
-            return res.status(200).json({ user, token, success: true });
-        }
-
-        return next(new AuthenticationError("Invalid Username/Password"));
-    } catch (err) {
-        console.log(err);
-        if (process.env.MODE == "development") console.log(err);
-        next(new InvalidParameters("Invalid Parameters"));
-    }
-};
-
-module.exports.userUpdate = async (req, res, next) => {};
-
-module.exports.userDelete = async (req, res, next) => {};
+    res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+    });
+});
