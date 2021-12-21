@@ -1,34 +1,36 @@
-const express = require("express");
-const ProductRouter = express.Router();
-const productController = require("../controllers/product.controller");
-const userAuth = require("../controllers/auth.controller");
-const upload = require("../services/product.image.upload");
+const {
+  getProducts,
+  getProductById,
+  createLike,
+  createComment,
+  createProduct,
+  updateProductById,
+} = require('../controllers/product.controller')
+const { authRequired } = require('../middleware/auth.middleware')
 
-ProductRouter.get(
-    "/listProduct",
-    // userAuth.verifyToken,
-    productController.listProducts
-);
+const express = require('express')
 
-ProductRouter.post(
-    "/newProduct",
-    userAuth.verifyToken,
-    upload.array("images", 10),
-    productController.newProduct
-);
+const router = express.Router()
 
-ProductRouter.get(
-    "/viewProduct",
-    userAuth.verifyToken,
-    productController.viewProduct
-);
+// GET ALL
+router.get('/', getProducts)
 
-ProductRouter.get(
-    "/userProducts",
-    userAuth.verifyToken,
-    productController.userProducts
-);
+// CREATE NEW
+router.post('/', authRequired, createProduct)
 
-ProductRouter.get("/image/:filename", productController.viewProductImage);
+// GET PRODUCT BY ID
+router.get('/:id', getProductById)
 
-module.exports = ProductRouter;
+// DELETE PRODUCT BY ID
+// router.delete('/:id', deleteProductsById)
+
+// UPDATE PRODUCT BY ID
+router.put('/:id', updateProductById)
+
+// POST NEW LIKE
+router.post('/:id/likes', authRequired, createLike)
+
+// POST NEW COMMENT
+router.post('/:id/comments', authRequired, createComment)
+
+module.exports = router

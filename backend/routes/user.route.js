@@ -1,21 +1,22 @@
-const express = require("express");
-const UserRouter = express.Router();
-const userController = require("../controllers/user.controller");
-const userAuth = require("../controllers/auth.controller");
-const upload = require("../services/profile.image.upload");
+const express = require('express')
+const router = express.Router()
 
-UserRouter.get("/", userAuth.verifyToken, userController.verifyToken);
+const { authRequired } = require('../middleware/auth.middleware')
+const {
+  authUser,
+  getUserProfile,
+  registerNewUser,
+  updateUserProfile,
+  updateUserAddress,
+} = require('../controllers/user.controller')
 
-UserRouter.post(
-    "/register",
-    upload.single("profilePic"),
-    userController.userRegister
-);
+// AUTH USER LOGIN
+router.post('/login', authUser)
+// REGISTER NEW USER
+router.post('/register', registerNewUser)
+// GET USER PROFILE
+router.get('/profile', authRequired, getUserProfile)
+// UPDATE USER PROFILE
+router.put('/profile', authRequired, updateUserProfile)
 
-UserRouter.post("/login", userController.userLogin);
-
-UserRouter.put("/update", userAuth.verifyToken, userController.userUpdate);
-
-UserRouter.delete("/delete", userAuth.verifyToken);
-
-module.exports = UserRouter;
+module.exports = router
