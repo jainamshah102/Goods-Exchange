@@ -1,70 +1,61 @@
-require("dotenv").config();
-const PORT = process.env.PORT;
+// IMPORTS
+const path = require('path')
+const morgan = require('morgan')
+const colors = require('colors')
+const dotenv = require('dotenv')
+const express = require('express')
+const bodyParser = require('body-parser')
+const connectDB = require('./config/db')
+const {
+  notFoundError,
+  customErrorHandler,
+} = require('./middleware/error.middleware')
+const productRoutes = require('./routes/product.route')
+const userRoutes = require('./routes/user.route')
+const requestRoutes = require('./routes/request.route')
+const transactionRoutes = require('./routes/transaction.route')
 
-const express = require("express");
+// CONFIG
+dotenv.config()
+connectDB()
 
-const app = express();
-const mongoose = require("mongoose");
-const Grid = require("gridfs-stream");
+// CONSTANTS
+const PORT = process.env.PORT || 5000
+const app = express()
 
-const connection = require("./services/mongodb.connection");
+morgan.token('custom', '🧅 🧅 :method :url => :status :total-time ms')
+app.use(morgan('custom'))
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-const UserRouter = require("./routes/user.route");
-const ProductRouter = require("./routes/product.route");
-const ChatRouter = require("./routes/chat.route");
+// ROUTES
+app.use('/api/products', productRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/requests', requestRoutes)
+app.use('/api/transactions', transactionRoutes)
 
-const NotFoundError = require("./errors/notFoundError");
-const cors = require("cors");
+const ___dirname = path.resolve()
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(___dirname, '/frontend/build')))
 
-const server = app.listen(PORT, () => console.log(`Serving @${PORT}`));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(___dirname, 'frontend', 'build', 'index.html'))
+  })
+} else {
+  app.get('/', (req, res) => {
+    res.send('OK ! API is running ...')
+  })
+}
 
-const io = require("socket.io")(server);
+// Handle page not found error
+app.use(notFoundError)
 
-connection();
-let gfs;
+// Replace for express default error handler
+app.use(customErrorHandler)
 
-const conn = mongoose.connection;
-
-conn.once("open", () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection("photos");
-});
-
-app.use(
-    express.urlencoded({
-        extended: true,
-    })
-);
-
-app.use(
-    cors({
-        origin: "*",
-    })
-);
-
-app.use(express.json());
-
-app.use((req, res, next) => {
-    req.io = io;
-    next();
-});
-
-app.use("/user", UserRouter);
-app.use("/product", ProductRouter);
-app.use("/chat", ChatRouter);
-
-app.all("*", (req, res, next) => {
-    return next(new NotFoundError("Api does not exist."));
-});
-
-app.use((err, req, res, next) => {
-    if (process.env.mode == "development") console.log(err);
-
-    err.statusCode = err.status || 500;
-    err.message = err.message || "Failed.";
-
-    res.status(err.statusCode).json({
-        success: false,
-        message: err.message,
-    });
-});
+app.listen(
+  PORT,
+  console.log(
+    `👍 👍 👍 ${process.env.NODE_ENV} MODE SERVER OK @: ${PORT}`.yellow.bold
+  )
+)
