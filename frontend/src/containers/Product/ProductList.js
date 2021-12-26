@@ -41,13 +41,6 @@ export default function ProductList() {
                 <ImageBox image={item.image} height='80px' />
               </td>
               <td>
-                {!item.tradeTo
-                  ? 'Not Changed'
-                  : item.tradeTo.status
-                  ? 'Wait'
-                  : 'Changed'}
-              </td>
-              <td>
                 <Link to={`/products/${item._id}`}>
                   <strong>{item.numRequests}</strong>
                 </Link>
