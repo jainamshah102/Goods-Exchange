@@ -11,18 +11,48 @@ exports.createTX = asyncHandler(async (req, res) => {
     const { buyerItemId, sellerItemId } = req.body;
 
     const buyerItem = await Product.findById(buyerItemId)
-        .select(["title", "description", "image", "location", "_id"])
+        .select([
+            "title",
+            "description",
+            "image",
+            "location",
+            "_id",
+            "isTraded",
+        ])
         .populate({
             path: "user",
             select: ["shipping", "_id", "name"],
         });
 
     const sellerItem = await Product.findById(sellerItemId)
-        .select(["title", "description", "image", "location", "_id"])
+        .select([
+            "title",
+            "description",
+            "image",
+            "location",
+            "_id",
+            "isTraded",
+        ])
         .populate({
             path: "user",
             select: ["shipping", "_id", "name"],
         });
+
+    console.log(buyerItem, sellerItem);
+    console.log(buyerItem.isTraded, sellerItem.isTraded);
+
+    if (buyerItem.isTraded || sellerItem.isTraded)
+        return res.status(400).json({ success: false });
+
+    buyerItem.isTraded = true;
+
+    await Product.findByIdAndUpdate(buyerItemId, {
+        isTraded: true,
+    });
+
+    await Product.findByIdAndUpdate(sellerItemId, {
+        isTraded: true,
+    });
 
     const newTransaction = new Transaction();
 
