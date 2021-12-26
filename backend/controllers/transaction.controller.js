@@ -18,6 +18,7 @@ exports.createTX = asyncHandler(async (req, res) => {
             "location",
             "_id",
             "isTraded",
+            "tradeTo",
         ])
         .populate({
             path: "user",
@@ -32,22 +33,27 @@ exports.createTX = asyncHandler(async (req, res) => {
             "location",
             "_id",
             "isTraded",
+            "tradeTo",
         ])
         .populate({
             path: "user",
             select: ["shipping", "_id", "name"],
         });
 
-    console.log(buyerItem, sellerItem);
-    console.log(buyerItem.isTraded, sellerItem.isTraded);
+    // console.log(buyerItem, sellerItem);
+    // console.log(buyerItem.isTraded, sellerItem.isTraded);
 
     if (buyerItem.isTraded || sellerItem.isTraded)
         return res.status(400).json({ success: false });
 
     buyerItem.isTraded = true;
 
+    const tradeTo = buyerItem["tradeTo"];
+    tradeTo["status"] = "accepted";
+
     await Product.findByIdAndUpdate(buyerItemId, {
         isTraded: true,
+        tradeTo,
     });
 
     await Product.findByIdAndUpdate(sellerItemId, {

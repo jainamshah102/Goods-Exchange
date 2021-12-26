@@ -30,6 +30,7 @@ export default function TransactionList() {
     const cancelTransactionHandler = (e) => {
         console.log("cancelTransactionHandler...");
     };
+
     return (
         <>
             <Link className="btn btn-warning my-2" to="/">
@@ -80,7 +81,7 @@ export default function TransactionList() {
                                         <td>
                                             <ImageBox
                                                 image={
-                                                    item.buyer.user._id ===
+                                                    item.buyer.user._id !==
                                                     userLogin._id
                                                         ? item.buyer.item.image
                                                         : item.seller.item.image
@@ -90,7 +91,7 @@ export default function TransactionList() {
                                             />
                                         </td>
                                         <td>
-                                            {item.buyer.user._id ===
+                                            {item.buyer.user._id !==
                                             userLogin._id
                                                 ? item.buyer.item.title
                                                 : item.seller.item.title}

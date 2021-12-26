@@ -19,7 +19,7 @@ exports.createRequest = asyncHandler(async (req, res) => {
         {
             $set: {
                 tradeTo: {
-                    status: true,
+                    status: "wait",
                     item: wantedProductId,
                     image: wantedProductImage,
                     title: wantedProductTitle,
@@ -49,12 +49,16 @@ exports.getRequests = asyncHandler(async (req, res) => {
         user: userLoginId,
         tradeTo: { $exists: true },
     });
+    console.log(productsList);
 
     if (!productsList.length) {
         res.status(201).json({ message: "You don not have any requests." });
     } else {
         const requestedList = productsList.filter((item) => {
-            return item.tradeTo.status === true;
+            return (
+                item.tradeTo.status === "wait" ||
+                item.tradeTo.status === "accepted"
+            );
         });
 
         res.status(201).json(requestedList);

@@ -43,7 +43,7 @@ requestFromSchema = mongoose.Schema(
 
 tradeToSchema = mongoose.Schema({
     status: {
-        type: Boolean,
+        type: String,
         required: true,
         default: false,
     },
