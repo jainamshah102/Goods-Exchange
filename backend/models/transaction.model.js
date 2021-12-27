@@ -132,7 +132,7 @@ const transactionSchema = mongoose.Schema(
         },
         transactionStatus: {
             type: String,
-            default: "Pending",
+            default: "Complete",
             // 'Shipping'
             // 'Receiving'
             // 'Completed'

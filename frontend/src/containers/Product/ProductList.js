@@ -28,7 +28,7 @@ export default function ProductList() {
           <tr>
             <th>Title</th>
             <th>Image</th>
-            <th>Status</th>
+            
             <th>Request number</th>
             <th>Edit</th>
           </tr>

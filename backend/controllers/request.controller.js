@@ -19,7 +19,7 @@ exports.createRequest = asyncHandler(async (req, res) => {
         {
             $set: {
                 tradeTo: {
-                    status: "wait",
+                    status: "Requested",
                     item: wantedProductId,
                     image: wantedProductImage,
                     title: wantedProductTitle,
