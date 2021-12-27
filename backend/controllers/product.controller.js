@@ -24,7 +24,9 @@ exports.getProducts = asyncHandler(async (req, res) => {
     if (!userId & !keyword) {
         condition = {};
     } else if (keyword) {
-        condition = { title: { $regex: keyword, $options: "i" } };
+        console.log(keyword)
+        condition = {  $or:[ {'title':{ $regex: keyword, $options: "i" }}, {'location':{$regex:keyword,$options:"i"}},{'description':{$regex:keyword,$options:"i"}} ]} ;
+        // title: { $regex: keyword, $options: "i" } || location:{$regex:keyword,$options:"i"}
     } else if (userId) {
         condition = { user: userId };
     }

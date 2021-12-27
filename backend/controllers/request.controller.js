@@ -55,7 +55,7 @@ exports.getRequests = asyncHandler(async (req, res) => {
     } else {
         const requestedList = productsList.filter((item) => {
             return (
-                item.tradeTo.status === "wait" ||
+                item.tradeTo.status === "Requested" ||
                 item.tradeTo.status === "accepted"
             );
         });
