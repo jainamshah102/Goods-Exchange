@@ -28,7 +28,7 @@ export default function ProductList() {
           <tr>
             <th>Title</th>
             <th>Image</th>
-            <th>Status</th>
+            
             <th>Request number</th>
             <th>Edit</th>
           </tr>
@@ -39,13 +39,6 @@ export default function ProductList() {
               <td xs={4}>{item.title}</td>
               <td>
                 <ImageBox image={item.image} height='80px' />
-              </td>
-              <td>
-                {!item.tradeTo
-                  ? 'Not Changed'
-                  : item.tradeTo.status
-                  ? 'Wait'
-                  : 'Changed'}
               </td>
               <td>
                 <Link to={`/products/${item._id}`}>

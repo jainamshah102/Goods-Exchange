@@ -52,7 +52,7 @@ export default function TransactionList() {
                                 <th>Status</th>
                                 <th>Image</th>
                                 <th>The item you want</th>
-                                <th>Edit</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -96,16 +96,7 @@ export default function TransactionList() {
                                                 ? item.buyer.item.title
                                                 : item.seller.item.title}
                                         </td>
-                                        <td>
-                                            <Button
-                                                variant="warning"
-                                                onClick={
-                                                    cancelTransactionHandler
-                                                }
-                                            >
-                                                Cancel
-                                            </Button>
-                                        </td>
+                                        
                                     </tr>
                                 </>
                             ))}
