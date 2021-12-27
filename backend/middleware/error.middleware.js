@@ -1,20 +1,20 @@
 exports.notFoundError = (req, res, next) => {
-  const error = new Error(`😱 😱 😱 Not found @ ${req.originalUrl}`)
-  res.status(404)
-  next(error)
-}
+    const error = new Error(`Not found @ ${req.originalUrl}`);
+    res.status(404);
+    next(error);
+};
 
 exports.customErrorHandler = (error, req, res, next) => {
-  const statusCode = error.status || 501
-  res.status(statusCode)
-  res.json({
-    status: statusCode,
-    message: error.message,
-    stack: error.stack,
-  })
-  console.log('🔥 Err code :>> ', statusCode)
-  console.log('💩 Err mess :>> ', error.message)
-}
+    const statusCode = error.status || 501;
+    res.status(statusCode);
+    res.json({
+        status: statusCode,
+        message: error.message,
+        stack: error.stack,
+    });
+    console.log("Err code :>> ", statusCode);
+    console.log(" Err mess :>> ", error.message);
+};
 
 // List of common errors you should prepare for:
 // 🎉 🥳 🎊  🔥 👍 💩 😵  😱

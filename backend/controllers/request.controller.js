@@ -49,7 +49,6 @@ exports.getRequests = asyncHandler(async (req, res) => {
         user: userLoginId,
         tradeTo: { $exists: true },
     });
-    console.log(productsList);
 
     if (!productsList.length) {
         res.status(201).json({ message: "You don not have any requests." });

@@ -29,6 +29,8 @@ exports.getProducts = asyncHandler(async (req, res) => {
         condition = { user: userId };
     }
 
+    condition["isTraded"] = false;
+
     let products = await Product.find(condition);
 
     if (available === "true") {

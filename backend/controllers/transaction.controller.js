@@ -40,9 +40,6 @@ exports.createTX = asyncHandler(async (req, res) => {
             select: ["shipping", "_id", "name"],
         });
 
-    // console.log(buyerItem, sellerItem);
-    // console.log(buyerItem.isTraded, sellerItem.isTraded);
-
     if (buyerItem.isTraded || sellerItem.isTraded)
         return res.status(400).json({ success: false });
 
