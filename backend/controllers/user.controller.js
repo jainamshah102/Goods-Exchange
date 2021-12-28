@@ -11,15 +11,15 @@ exports.authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        throw new Error("Vui lòng điền đủ thông tin!");
+        throw new Error("Please fill in all the information!");
     }
 
     const user = await User.findOne({ email });
 
-    if (!user) throw new Error("Email không tồn tại!");
+    if (!user) throw new Error("Email does not exist!");
 
     const isMatch = await user.matchPassword(password);
-    if (!isMatch) throw new Error("Sai mật khẩu!");
+    if (!isMatch) throw new Error("Wrong password!");
 
     res.json({
         _id: user._id,
@@ -39,13 +39,13 @@ exports.registerNewUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-        throw new Error("Vui lòng điền đủ thông tin!");
+        throw new Error("Please fill in all the information!");
     }
 
     const isUserExist = await User.findOne({ email });
 
     if (isUserExist) {
-        throw new Error("Email đã tồn tại!");
+        throw new Error("Email already exist!");
     }
 
     const user = new User({ email, name, password, shipping: {} });

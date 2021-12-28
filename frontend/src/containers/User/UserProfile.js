@@ -224,9 +224,10 @@ export default function UserProfile() {
               </Col>
             </Form.Row>
           </Col>
-          <Button className='ml-auto mr-3' type='submit'>
+          <Link to='/'><Button className='ml-auto mr-3' type='submit'>
             Update
           </Button>
+            </Link>
         </Form.Row>
       </Form>
     </>
